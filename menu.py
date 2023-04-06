@@ -1,9 +1,39 @@
+"""
+This module provides a Menu class to display a menu using the curses library.
+
+The Menu class takes in a dictionary of menu options and their corresponding functions, a list of header messages, and a log file to display status messages. The show method displays the menu and allows the user to interact with it.
+
+Example usage:
+
+    menu_options = {
+        "Option 1": lambda: print("Selected Option 1"),
+        "Option 2": lambda: print("Selected Option 2"),
+        "Exit": lambda: print("Exiting menu...")
+    }
+    header_msg = ["Welcome to the menu!", "Select an option below:"]
+    log_file = "menu.log"
+    menu = Menu(menu_options, header_msg, log_file)
+    menu.show()
+
+"""
+
 import curses
 import time
 
 
 class Menu:
     def __init__(self, functionalities_Dic, header_msg, log_file) -> None:
+        """
+        Initializes a Menu object.
+
+        Args:
+        - functionalities_Dic: A dictionary of menu options and their corresponding functions.
+        - header_msg: A list of header messages.
+        - log_file: A log file to display status messages.
+
+        Returns:
+        - None.
+        """
         self.menu_options = functionalities_Dic
         self.header_msg = header_msg
         self.log_file = log_file
@@ -18,6 +48,15 @@ class Menu:
         self.max_col = 0
 
     def _start_screen(self):
+        """
+        Sets up the curses screen and initializes colors.
+
+        Args:
+        - None.
+
+        Returns:
+        - None.
+        """
         self.screen.keypad(True)
 
         self._draw_header()
@@ -38,12 +77,30 @@ class Menu:
                          curses.COLOR_BLACK)
 
     def _stop_screen(self):
+        """
+        Closes the curses screen and restores terminal settings.
+
+        Args:
+        - None.
+
+        Returns:
+        - None.
+        """
         self.screen.keypad(False)
         curses.nocbreak()
         curses.echo()
         curses.endwin()
 
     def _draw_header(self):
+        """
+        Draws the header on the curses screen.
+
+        Args:
+        - None.
+
+        Returns:
+        - None.
+        """
         self.screen.clear()
         self.screen.border(0)
         line = 2
@@ -60,7 +117,15 @@ class Menu:
         self.status_area_position = line+2
         self.screen.refresh()
 
+
+
     def _change_items_colors(self):
+        """
+        Changes the color of the menu options based on the user's selection.
+
+        Returns:
+            None
+        """
         for index, item in enumerate(self.menu_options.keys()):
             if index == self.current_row:
                 self.screen.addstr(self.menu_position + index,
@@ -71,12 +136,19 @@ class Menu:
         self.screen.refresh()
 
     def _run(self, stdscr):
+        """
+        Runs the menu loop.
+
+        Args:
+        - stdscr: a curses window object
+
+        Returns: None
+        """
         try:
             self.screen = stdscr
             self.max_row, self.max_col = self.screen.getmaxyx()
             if self.status_area_position > self.max_row:
-                print(
-                    "A janela do terminal é muito pequena, tente com uma janela maior.")
+                print("A janela do terminal é muito pequena, tente com uma janela maior.")
                 time.sleep(2)
                 return
 
@@ -93,20 +165,24 @@ class Menu:
                 elif key == curses.KEY_ENTER or key in [10, 13]:
                     option = list(self.menu_options.keys())[self.current_row]
                     if option == "Exit":
-                      #  self._stop_screen()
+                    #  self._stop_screen()
                         print("Até logo!")
                         break
                     else:
-
                         self.menu_options[option]()
                         self._draw_status_area()
         except Exception as e:
-
             print("Ocorreu um erro:", e)
             time.sleep(3)
         return
 
+
     def _draw_status_area(self):
+        """
+        Draws the status area of the menu.
+
+        Returns: None
+        """
         status_are_line = self.status_area_position
 
         with open(self.log_file, 'r+') as file:
@@ -120,22 +196,25 @@ class Menu:
                         message = ':'.join(parts[2:])
 
                         if level == 'ERROR':
-                            self.screen.addstr(
-                                status_are_line, 10, message, curses.color_pair(3))
+                            self.screen.addstr(status_are_line, 10, message, curses.color_pair(3))
                         if level == 'INFO':
-                            self.screen.addstr(
-                                status_are_line, 10, message, curses.color_pair(1))
+                            self.screen.addstr(status_are_line, 10, message, curses.color_pair(1))
                         if level == 'DEBUG':
-                            self.screen.addstr(
-                                status_are_line, 10, message, curses.color_pair(5))
+                            self.screen.addstr(status_are_line, 10, message, curses.color_pair(5))
                 else:
                     msg = f"O tamanho maximo do terminal atigindo ({self.max_row} X {self.max_col})! - Amplie a janela para ver mais "
-                  #  self.screen.addstr(10, 50,
+                #  self.screen.addstr(10, 50,
                     #  msg, curses.color_pair(4))
 
                     break
-           # file.truncate(0)
+        # file.truncate(0)
+
 
     def show(self):
+        """
+        Displays the menu and waits for user input.
+
+        Returns: None
+        """
         curses.wrapper(self._run)
         return
