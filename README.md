@@ -63,6 +63,6 @@ Contribuições para este projeto são bem-vindas e incentivadas. Para contribui
 * Crie uma nova ramificação para suas alterações.
 * Faça suas alterações e confirme-as em sua ramificação.
 * Envie suas alterações para o repositório bifurcado.
-* Crie uma solicitação pull para mesclar suas alterações no repositório principal do projeto.
+* Crie uma pull resquest  para mesclar suas alterações no repositório principal do projeto.
 
 Ao fazer contribuições, certifique-se de que suas alterações sejam bem documentadas e testadas e siga o estilo de codificação e as diretrizes do projeto.
