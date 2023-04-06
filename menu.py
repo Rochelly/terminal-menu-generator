@@ -148,7 +148,7 @@ class Menu:
             self.screen = stdscr
             self.max_row, self.max_col = self.screen.getmaxyx()
             if self.status_area_position > self.max_row:
-                print("A janela do terminal é muito pequena, tente com uma janela maior.")
+                print(" The terminal window is too small, try with a larger window.")
                 time.sleep(2)
                 return
 
@@ -202,7 +202,7 @@ class Menu:
                         if level == 'DEBUG':
                             self.screen.addstr(status_are_line, 10, message, curses.color_pair(5))
                 else:
-                    msg = f"O tamanho maximo do terminal atigindo ({self.max_row} X {self.max_col})! - Amplie a janela para ver mais "
+                    msg = f"Maximum terminal size reached ({self.max_row} X {self.max_col})! - Enlarge the window to see more."
                 #  self.screen.addstr(10, 50,
                     #  msg, curses.color_pair(4))
 
