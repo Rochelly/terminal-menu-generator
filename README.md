@@ -13,7 +13,7 @@ Each menu option is associated with a function that performs a specific action. 
 
 The results of the functions can be optionally logged to a file by configuring the logging system. By default, the tool logs DEBUG level messages to a file named log_file.log in the project directory.
 
-<p align="center"><img src="https://user-images.githubusercontent.com/11949740/230423234-284e778e-dadb-4502-8fb9-84bee87ba7f9.png"></p>
+<p align="center"><img src="https://user-images.githubusercontent.com/11949740/230429876-c7b12844-fc9d-4909-b6a8-e3ee0ca0a211.png"></p>
 
 ## Customization
 The tool can be customized by defining new menu options and functions. To define a new menu option, add a new key-value pair to the menu_options dictionary in the main.py file, where the key is the option name and the value is the function that should be executed when the option is selected.
