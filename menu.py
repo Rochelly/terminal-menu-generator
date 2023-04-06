@@ -47,6 +47,22 @@ class Menu:
         self.max_row = 0
         self.max_col = 0
 
+    def clear_log_file(self):
+        """
+        Clears the contents of the log file.
+
+        This function opens the log file specified by the `log_file` attribute in write mode ('w'),
+        writes an empty string to the file to clear its contents, and then closes the file.
+
+        Args:
+            self (object): The object instance.
+
+        Returns:
+            None
+        """
+        with open(self.log_file, 'w') as f:
+            f.write('')
+
     def _start_screen(self):
         """
         Sets up the curses screen and initializes colors.
@@ -117,8 +133,6 @@ class Menu:
         self.status_area_position = line+2
         self.screen.refresh()
 
-
-
     def _change_items_colors(self):
         """
         Changes the color of the menu options based on the user's selection.
@@ -165,10 +179,11 @@ class Menu:
                 elif key == curses.KEY_ENTER or key in [10, 13]:
                     option = list(self.menu_options.keys())[self.current_row]
                     if option == "Exit":
-                    #  self._stop_screen()
+                        #  self._stop_screen()
                         print("Até logo!")
                         break
                     else:
+                        self.clear_log_file()
                         self.menu_options[option]()
                         self._draw_status_area()
         except Exception as e:
@@ -176,13 +191,13 @@ class Menu:
             time.sleep(3)
         return
 
-
     def _draw_status_area(self):
         """
         Draws the status area of the menu.
 
         Returns: None
         """
+        
         status_are_line = self.status_area_position
 
         with open(self.log_file, 'r+') as file:
@@ -196,11 +211,14 @@ class Menu:
                         message = ':'.join(parts[2:])
 
                         if level == 'ERROR':
-                            self.screen.addstr(status_are_line, 10, message, curses.color_pair(3))
+                            self.screen.addstr(
+                                status_are_line, 10, message, curses.color_pair(3))
                         if level == 'INFO':
-                            self.screen.addstr(status_are_line, 10, message, curses.color_pair(1))
+                            self.screen.addstr(
+                                status_are_line, 10, message, curses.color_pair(1))
                         if level == 'DEBUG':
-                            self.screen.addstr(status_are_line, 10, message, curses.color_pair(5))
+                            self.screen.addstr(
+                                status_are_line, 10, message, curses.color_pair(5))
                 else:
                     msg = f"Maximum terminal size reached ({self.max_row} X {self.max_col})! - Enlarge the window to see more."
                 #  self.screen.addstr(10, 50,
@@ -209,12 +227,12 @@ class Menu:
                     break
         # file.truncate(0)
 
-
     def show(self):
         """
         Displays the menu and waits for user input.
 
         Returns: None
         """
+
         curses.wrapper(self._run)
         return
